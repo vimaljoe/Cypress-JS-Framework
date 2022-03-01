@@ -1,0 +1,40 @@
+stage ('Cypress'){
+    parallel {
+        stage('Chrome') {
+            agent {
+                node {
+                    label 'agent1'
+                }
+            }
+            steps {
+                    sh 'cypress install'
+                    sh 'npm install'
+                    sh 'npx cypress run --record --group 3x-chrome --browser chrome --parallel'
+            }
+        }
+        stage('Electron') {
+            agent {
+                node {
+                    label 'agent2'
+                }
+            }
+            steps {
+                    sh 'cypress install'
+                    sh 'npm install'
+                    sh 'npx cypress run --record --group 3x-electron --browser electron --parallel'
+            }
+        }
+        stage('Firefox') {
+            agent {
+                node {
+                    label 'agent3'
+                }
+            }
+            steps {
+                    sh 'cypress install'
+                    sh 'npm install'
+                    sh 'npx cypress run --record --group 3x-firefox --browser firefox --parallel'
+            }
+        }
+    }
+}

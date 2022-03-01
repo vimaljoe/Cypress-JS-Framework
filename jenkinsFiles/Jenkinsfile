@@ -1,0 +1,82 @@
+#!/usr/bin/env groovy
+
+properties([
+    parameters([
+    choice(
+        // Use this choice to select the environment to run
+        name: 'Environment',
+        choices: "DEV\nQA\nUAT",
+        description: 'Environment to run on',
+        defaultValue: 'QA'
+    ),
+    choice(
+        //Use this choice to select the required browser to run the tests
+        name: 'Browser',
+        choices: "chrome\nfirefox\nelectron",
+        description: 'Browser to run on',
+        defaultValue: 'electron'
+    ),
+    ])
+    string(
+        name: 'TestSuite'
+        defaultValue: 'cypress/integration/myStore/**',
+        description: "Test suite to run"
+    )
+])
+
+String cron_string = BRANCH_NAME = "master" ? "00 18 * * *" : ""
+
+pipeline {
+    agent any
+
+    triggers {
+        cron(cron_string)
+    }
+
+    options {
+        timeout(time: 5, unit: 'HOURS')
+    }
+
+    environment{
+        //read the Jenkins credentials/secrets here
+    }
+
+    stages{
+        stage('Build and Deploy Application'){
+            steps {
+                echo "Build and deploy application"
+            }
+        }
+
+        stage('Execute Tests'){
+            script{
+                if (params.Environment == 'DEV'){
+                    //Use the credentials and secrets to select the right environment
+                } else if (params.Environment == 'QA') {
+                    //Use the credentials and secrets to select the right environment
+                } else if (params.Environment == 'UAT') {
+                    //Use the credentials and secrets to select the right environment
+                }
+
+                try {
+                    sh 'cypress install'
+                    sh 'npm install'
+                    sh 'npx cypress run --browser ${Browser} --spec ${TestSuite}'
+                }
+                finally {
+                    archivedArtifacts artifacts: "reports/"
+                    onlyIfSuccessful: false
+                }
+            }
+        }
+    }
+    post{
+        always{
+            script{
+                def msg = 'Test execution on ' + params.Environment + 'environment using browser ' + params.Browser;
+                slackSend channel: "#automated_test_results", message: msg + reportUrl
+            }
+        }
+    }
+}
+

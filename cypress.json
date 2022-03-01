@@ -1,0 +1,30 @@
+{
+  "env": {
+    "RUNNING_ON_JENKINS": false,
+    "TAGS": "not @ignore"
+  },
+  "baseUrl": "http://automationpractice.com/index.php",
+  "testFiles": "**/*.{feature,features}",
+  "defaultCommandTimeout": 15000,
+  "requestTimeout": 60000,
+  "responseTimeout": 60000,
+  "pageLoadTimeout": 90000,
+  "viewportWidth": 2560,
+  "viewportHeight": 1440,
+  "videoCompression": false,
+  "video": false,
+  "screenshotOnRunFailure": true,
+  "screenshotsFolder": "screenshots",
+  "chromeWebSecurity": false,
+  "watchForFileChanges": false,
+  "downloadsFolder": "downloads",
+  "reporter": "mochawesome",
+  "reporterOptions": {
+    "reportDir": "cypress/reports",
+    "reportFilename": "report",
+    "overwrite": true,
+    "html": true,
+    "json": true,
+    "charts": true
+  }
+}
