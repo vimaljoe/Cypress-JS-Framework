@@ -1,4 +1,4 @@
-# Capitol on tap - Senior QA Engineer - Technical assessment
+# Automation Practice - Technical assessment
 
 This is a technical task to complete an automation framework for a new mobile
 responsive commerce site - http://automationpractice.com/index.php.
